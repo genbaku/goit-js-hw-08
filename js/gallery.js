@@ -68,8 +68,7 @@ const images = [
 // ---------------------------------------------------
 
 const galleryContainer = document.querySelector('.gallery');
-let currentImageLightBox = null;
-images.forEach(({ preview, original, description }) => {
+const galleryItems = images.map(({ preview, original, description }) => {
   const galleryItem = document.createElement('li');
   galleryItem.classList.add('gallery-item');
 
@@ -85,8 +84,12 @@ images.forEach(({ preview, original, description }) => {
 
   galleryLink.appendChild(galleryImage);
   galleryItem.appendChild(galleryLink);
-  galleryContainer.appendChild(galleryItem);
+
+  return galleryItem;
 });
+
+galleryContainer.append(...galleryItems);
+let currentImageLightBox = null;
 
 // --------------------------------------------------------
 
@@ -102,11 +105,19 @@ galleryContainer.addEventListener('click', (event) => {
       <img src="${originalImage}" alt="${originalAlt}">
     `);
     currentImageLightBox.show();
+    document.addEventListener('keydown', escapeKey);
   }
 });
 
-document.addEventListener('keydown', (event) => {
+function escapeKey(event) {
   if (currentImageLightBox && event.key === 'Escape') {
     currentImageLightBox.close();
+    document.removeEventListener('keydown', escapeKey);
   }
-});
+}
+
+// document.addEventListener('keydown', (event) => {
+//   if (currentImageLightBox && event.key === 'Escape') {
+//     currentImageLightBox.close();
+//   }
+// });
